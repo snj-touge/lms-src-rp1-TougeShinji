@@ -13,6 +13,7 @@ import jp.co.sss.lms.entity.TStudentAttendance;
  * 勤怠情報（受講生入力）テーブルマッパー
  * 
  * @author 東京ITスクール
+ * @author 峠伸治 - Task.25
  */
 @Mapper
 public interface TStudentAttendanceMapper {
