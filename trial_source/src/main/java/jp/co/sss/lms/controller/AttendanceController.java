@@ -29,7 +29,6 @@ public class AttendanceController {
 	private StudentAttendanceService studentAttendanceService;
 	@Autowired
 	private LoginUserDto loginUserDto;
-	
 
 	/**
 	 * 勤怠管理画面 初期表示
@@ -46,9 +45,9 @@ public class AttendanceController {
 		// 勤怠一覧の取得
 		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
-		//Task25
+		//峠伸治 Task.25
 		boolean isNotEnter = studentAttendanceService.notEnterCount();
-				
+		//過去日に未入力があるか表示
 		model.addAttribute("isNotEnter", isNotEnter);
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
