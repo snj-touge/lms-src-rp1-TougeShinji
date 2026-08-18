@@ -64,7 +64,14 @@ public interface TStudentAttendanceMapper {
 	 * @return 更新結果
 	 */
 	Boolean update(TStudentAttendance tStudentAttendance);
-	
+
+	/**
+	 * 勤怠の未入力の検索
+	 * 
+	 * @param tStudentAttendance
+	 * @return
+	 * @author 峠伸治 – Task.25
+	 */
 	Integer notEnterCount(TStudentAttendance tStudentAttendance);
 
 }
