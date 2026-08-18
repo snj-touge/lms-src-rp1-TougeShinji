@@ -6,6 +6,7 @@ import lombok.Data;
  * 日次の勤怠フォーム
  * 
  * @author 東京ITスクール
+ * @author 峠伸治 - Task.26
  */
 @Data
 public class DailyAttendanceForm {
@@ -47,4 +48,27 @@ public class DailyAttendanceForm {
 	/** インデックス */
 	private String index;
 
+	//峠伸治 Task.26
+	/** 
+	 * 出勤時間(時間)
+	 *  @author 峠伸治 - Task.26
+	 **/
+	private String trainingStartTimeHour;
+
+	/**
+	 * 出勤時間(分)
+	 * @author 峠伸治 - Task.26
+	 */
+	private String trainingStartTimeMinutes;
+	/** 
+	 * 退勤時間(時間)
+	 *  @author 峠伸治 - Task.26
+	 **/
+	private String trainingEndTimeHour;
+
+	/**
+	 * 退勤時間(分)
+	 * @author 峠伸治 - Task.26
+	 */
+	private String trainingEndTimeMinutes;
 }
