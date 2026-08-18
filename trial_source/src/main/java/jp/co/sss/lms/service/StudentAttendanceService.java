@@ -348,7 +348,7 @@ public class StudentAttendanceService {
 		tStudentAttendance.setDeleteFlg(Constants.DB_FLG_FALSE);
 		tStudentAttendance.setTrainingDate(today);
 		Integer count = tStudentAttendanceMapper.notEnterCount(tStudentAttendance);
-		System.out.println(count);
+		
 		if(count > 0) {
 			return true;
 		}
