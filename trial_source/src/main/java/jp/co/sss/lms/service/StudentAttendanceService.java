@@ -28,6 +28,7 @@ import jp.co.sss.lms.util.TrainingTime;
  * 勤怠情報（受講生入力）サービス
  * 
  * @author 東京ITスクール
+ * @author 峠伸治 - Task.25
  */
 @Service
 public class StudentAttendanceService {
@@ -62,7 +63,7 @@ public class StudentAttendanceService {
 			// 中抜け時間を設定
 			if (dto.getBlankTime() != null) {
 				TrainingTime blankTime = attendanceUtil.calcBlankTime(dto.getBlankTime());
-				dto.setBlankTimeValue(String.valueOf(blankTime));
+				dto.setBlankTimeValue(blankTime.getFormattedString());
 			}
 			// 遅刻早退区分判定
 			AttendanceStatusEnum statusEnum = AttendanceStatusEnum.getEnum(dto.getStatus());
@@ -70,7 +71,6 @@ public class StudentAttendanceService {
 				dto.setStatusDispName(statusEnum.name);
 			}
 		}
-
 		return attendanceManagementDtoList;
 	}
 
@@ -213,7 +213,7 @@ public class StudentAttendanceService {
 	 */
 	public AttendanceForm setAttendanceForm(
 			List<AttendanceManagementDto> attendanceManagementDtoList) {
-
+		//峠伸治 - Task.26
 		AttendanceForm attendanceForm = new AttendanceForm();
 		attendanceForm.setAttendanceList(new ArrayList<DailyAttendanceForm>());
 		attendanceForm.setLmsUserId(loginUserDto.getLmsUserId());
@@ -232,17 +232,14 @@ public class StudentAttendanceService {
 		// 勤怠管理リストの件数分、日次の勤怠フォームに移し替え
 		for (AttendanceManagementDto attendanceManagementDto : attendanceManagementDtoList) {
 			DailyAttendanceForm dailyAttendanceForm = new DailyAttendanceForm();
-			dailyAttendanceForm
-					.setStudentAttendanceId(attendanceManagementDto.getStudentAttendanceId());
-			dailyAttendanceForm
-					.setTrainingDate(dateUtil.toString(attendanceManagementDto.getTrainingDate()));
-			dailyAttendanceForm
-					.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
+			dailyAttendanceForm.setStudentAttendanceId(attendanceManagementDto.getStudentAttendanceId());
+			dailyAttendanceForm.setTrainingDate(dateUtil.toString(attendanceManagementDto.getTrainingDate()));
+			dailyAttendanceForm.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
 			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
 			if (attendanceManagementDto.getBlankTime() != null) {
 				dailyAttendanceForm.setBlankTime(attendanceManagementDto.getBlankTime());
-				dailyAttendanceForm.setBlankTimeValue(String.valueOf(
-						attendanceUtil.calcBlankTime(attendanceManagementDto.getBlankTime())));
+				dailyAttendanceForm.setBlankTimeValue(
+						String.valueOf(attendanceUtil.calcBlankTime(attendanceManagementDto.getBlankTime())));
 			}
 			dailyAttendanceForm.setStatus(String.valueOf(attendanceManagementDto.getStatus()));
 			dailyAttendanceForm.setNote(attendanceManagementDto.getNote());
@@ -346,7 +343,7 @@ public class StudentAttendanceService {
 		//検索用のエンティティ作成
 		TStudentAttendance tStudentAttendance = new TStudentAttendance();
 		//日付のフォーマットパターンを設定
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT);
 		//今日の日付を取得
 		Date today = new Date();
 		String dateString = sdf.format(today);
