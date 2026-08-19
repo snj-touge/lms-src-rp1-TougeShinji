@@ -49,6 +49,7 @@ public class AttendanceController {
 		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		//峠伸治 Task.25
+		//過去日に未入力があるか検索
 		boolean isNotEnter = studentAttendanceService.notEnterCount();
 		//過去日に未入力があるか表示
 		model.addAttribute("isNotEnter", isNotEnter);
