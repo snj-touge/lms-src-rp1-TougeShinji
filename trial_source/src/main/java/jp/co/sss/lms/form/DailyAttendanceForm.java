@@ -59,7 +59,7 @@ public class DailyAttendanceForm {
 	 * 出勤時間(分)
 	 * @author 峠伸治 - Task.26
 	 */
-	private String trainingStartTimeMinutes;
+	private String trainingStartTimeMinute;
 	/** 
 	 * 退勤時間(時間)
 	 *  @author 峠伸治 - Task.26
@@ -70,5 +70,5 @@ public class DailyAttendanceForm {
 	 * 退勤時間(分)
 	 * @author 峠伸治 - Task.26
 	 */
-	private String trainingEndTimeMinutes;
+	private String trainingEndTimeMinute;
 }
