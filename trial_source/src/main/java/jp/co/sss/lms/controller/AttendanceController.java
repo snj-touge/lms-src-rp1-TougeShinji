@@ -21,6 +21,7 @@ import jp.co.sss.lms.util.Constants;
  * 
  * @author 東京ITスクール
  * @author 峠伸治 - Task.25
+ * @author 峠伸治 - Task.26
  */
 @Controller
 @RequestMapping("/attendance")
@@ -133,11 +134,15 @@ public class AttendanceController {
 	 * @param result
 	 * @return 勤怠管理画面
 	 * @throws ParseException
+	 * @author 峠伸治 - Task.26
 	 */
 	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
 	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
 			throws ParseException {
 
+		//峠伸治 - Task.26
+		//時間と分を結合
+		studentAttendanceService.formatConversion(attendanceForm);
 		// 更新
 		String message = studentAttendanceService.update(attendanceForm);
 		model.addAttribute("message", message);
