@@ -4,7 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,7 @@ import jp.co.sss.lms.util.TrainingTime;
  * 
  * @author 東京ITスクール
  * @author 峠伸治 - Task.25
+ * @author 峠伸治 - Task.26
  */
 @Service
 public class StudentAttendanceService {
@@ -214,6 +217,20 @@ public class StudentAttendanceService {
 	public AttendanceForm setAttendanceForm(
 			List<AttendanceManagementDto> attendanceManagementDtoList) {
 		//峠伸治 - Task.26
+
+		//時間マップ作成
+		Map<Integer, String> hourMap = new LinkedHashMap<>();
+		hourMap.put(null, "");
+		for (int i = 0; i < 24; i++) {
+			hourMap.put(i, String.format("%02d", i));
+		}
+		//分マップ作成
+		Map<Integer, String> minuteMap = new LinkedHashMap<>();
+		minuteMap.put(null, "");
+		for (int i = 0; i < 60; i++) {
+			minuteMap.put(i, String.format("%02d", i));
+		}
+
 		AttendanceForm attendanceForm = new AttendanceForm();
 		attendanceForm.setAttendanceList(new ArrayList<DailyAttendanceForm>());
 		attendanceForm.setLmsUserId(loginUserDto.getLmsUserId());
@@ -234,8 +251,22 @@ public class StudentAttendanceService {
 			DailyAttendanceForm dailyAttendanceForm = new DailyAttendanceForm();
 			dailyAttendanceForm.setStudentAttendanceId(attendanceManagementDto.getStudentAttendanceId());
 			dailyAttendanceForm.setTrainingDate(dateUtil.toString(attendanceManagementDto.getTrainingDate()));
-			dailyAttendanceForm.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
-			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
+			//			dailyAttendanceForm.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
+			//出勤時間を変換
+			if (attendanceManagementDto.getTrainingStartTime() != null) {
+				TrainingTime trainingStartTime = new TrainingTime(attendanceManagementDto.getTrainingStartTime());
+				//時間と分をそれぞれ分解
+				dailyAttendanceForm.setTrainingStartTimeHour(hourMap.get(trainingStartTime.getHour()));
+				dailyAttendanceForm.setTrainingStartTimeMinute(minuteMap.get(trainingStartTime.getMinute()));
+			}
+			//			dailyAttendanceForm.setTrainingEndTiTrainingTimeme(attendanceManagementDto.getTrainingEndTime());
+			//退勤時間を変換
+			if (attendanceManagementDto.getTrainingEndTime() != null) {
+				TrainingTime trainingEndTime = new TrainingTime(attendanceManagementDto.getTrainingEndTime());
+				//時間と分をそれぞれ分解
+				dailyAttendanceForm.setTrainingEndTimeHour(hourMap.get(trainingEndTime.getHour()));
+				dailyAttendanceForm.setTrainingEndTimeMinute(minuteMap.get(trainingEndTime.getMinute()));
+			}
 			if (attendanceManagementDto.getBlankTime() != null) {
 				dailyAttendanceForm.setBlankTime(attendanceManagementDto.getBlankTime());
 				dailyAttendanceForm.setBlankTimeValue(
@@ -251,7 +282,6 @@ public class StudentAttendanceService {
 
 			attendanceForm.getAttendanceList().add(dailyAttendanceForm);
 		}
-
 		return attendanceForm;
 	}
 
@@ -360,6 +390,30 @@ public class StudentAttendanceService {
 		}
 		//未入力カウント数が0の場合、falseを返す
 		return false;
+
+	}
+
+	public void formatConversion(AttendanceForm attendanceForm) {
+		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
+			//出勤時間を変換(未入力の場合は行わない)
+			if ((!dailyAttendanceForm.getTrainingStartTimeHour().isEmpty())
+					&& (!dailyAttendanceForm.getTrainingStartTimeMinute().isEmpty())) {
+				//時間と分を結合(HH:mm形式)
+				TrainingTime trainingStartTime = new TrainingTime(
+						Integer.parseInt(dailyAttendanceForm.getTrainingStartTimeHour()),
+						Integer.parseInt(dailyAttendanceForm.getTrainingStartTimeMinute()));
+				dailyAttendanceForm.setTrainingStartTime(trainingStartTime.getFormattedString());
+			}
+			//退勤時間を変換(未入力の場合は行わない)
+			if ((!dailyAttendanceForm.getTrainingEndTimeHour().isEmpty())
+					&& (!dailyAttendanceForm.getTrainingEndTimeMinute().isEmpty())) {
+				//時間と分を結合(HH:mm形式)
+				TrainingTime trainingEndTime = new TrainingTime(
+						Integer.parseInt(dailyAttendanceForm.getTrainingEndTimeHour()),
+						Integer.parseInt(dailyAttendanceForm.getTrainingEndTimeMinute()));
+				dailyAttendanceForm.setTrainingEndTime(trainingEndTime.getFormattedString());
+			}
+		}
 
 	}
 
