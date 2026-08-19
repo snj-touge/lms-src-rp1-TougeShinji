@@ -48,27 +48,27 @@
 								<td class="w140">[[${dailyAttendanceForm.dispTrainingDate}]]</td>
 								<td class="w300">[[${dailyAttendanceForm.sectionName}]]</td>
 								<!-- 峠 Task.26	-->
-								<td class="w70">
+								<td class="w80">
 									<select th:name="|attendanceList[${stat.index}].trainingStartTimeHour|"
 									th:value="${dailyAttendanceForm.trainingStartTimeHour}" class="form-control"/>
 									<option></option>
 									<option th:each="i : ${#numbers.sequence(0, 23)}" th:text="${#numbers.formatInteger(i, 2)}" th:selected="${#numbers.formatInteger(i, 2) == dailyAttendanceForm.trainingStartTimeHour}"></option>
 								</td>
 								<td class="w70"> : </td>
-								<td class="w70">
+								<td class="w80">
 									<select th:name="|attendanceList[${stat.index}].trainingStartTimeMinute|"
 									th:value="${dailyAttendanceForm.trainingStartTimeMinute}" class="form-control"/>
 									<option></option>
 									<option th:each="i : ${#numbers.sequence(0, 59)}" th:text="${#numbers.formatInteger(i, 2)}" th:selected="${#numbers.formatInteger(i, 2) == dailyAttendanceForm.trainingStartTimeMinute}"></option>
 								</td>
-								<td class="w70">
+								<td class="w80">
 									<select th:name="|attendanceList[${stat.index}].trainingEndTimeHour|"
 									th:value="${dailyAttendanceForm.trainingEndTimeHour}" class="form-control"/>
 									<option></option>
 									<option th:each="i : ${#numbers.sequence(0, 23)}" th:text="${#numbers.formatInteger(i, 2)}" th:selected="${#numbers.formatInteger(i, 2) == dailyAttendanceForm.trainingEndTimeHour}"></option>
 								</td>
 								<td class="w70"> : </td>
-								<td class="w70">
+								<td class="w80">
 									<select th:name="|attendanceList[${stat.index}].trainingEndTimeMinute|"
 									th:value="${dailyAttendanceForm.trainingEndTimeMinute}" class="form-control"/>
 									<option></option>
