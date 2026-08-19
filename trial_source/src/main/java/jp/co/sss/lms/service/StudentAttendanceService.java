@@ -213,6 +213,7 @@ public class StudentAttendanceService {
 	 * 
 	 * @param attendanceManagementDtoList
 	 * @return 勤怠編集フォーム
+	 * @author 峠伸治 - Task26
 	 */
 	public AttendanceForm setAttendanceForm(
 			List<AttendanceManagementDto> attendanceManagementDtoList) {
@@ -393,6 +394,12 @@ public class StudentAttendanceService {
 
 	}
 
+	/**
+	 * 出退勤の時間と分の結合
+	 * 
+	 * @param attendanceForm
+	 * @author 峠伸治 - Task.26
+	 */
 	public void formatConversion(AttendanceForm attendanceForm) {
 		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
 			//出勤時間を変換(未入力の場合は行わない)
