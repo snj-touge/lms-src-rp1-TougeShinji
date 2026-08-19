@@ -70,7 +70,7 @@ public interface TStudentAttendanceMapper {
 	 * 勤怠の未入力の検索
 	 * 
 	 * @param tStudentAttendance
-	 * @return
+	 * @return 未入力の勤怠の件数
 	 * @author 峠伸治 – Task.25
 	 */
 	Integer notEnterCount(TStudentAttendance tStudentAttendance);
