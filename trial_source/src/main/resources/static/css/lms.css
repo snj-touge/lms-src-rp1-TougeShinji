@@ -18,6 +18,12 @@ div.contract {
 	padding: 5px;
 }
 
+.errors {
+	font-weight: bold;
+	color: #b94a48;
+	padding: 5px;
+}
+
 .errorInput {
 	background-color: #FFD2D2;
 	border-color: red;
