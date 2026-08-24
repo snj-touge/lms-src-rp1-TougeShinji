@@ -482,7 +482,7 @@ public class StudentAttendanceService {
 						null, null);
 			}
 			//出退勤の時間が比較できる
-			if (!!StringUtils.isEmpty(dailyAttendanceForm.getTrainingEndTime()) && !StringUtils.isEmpty(dailyAttendanceForm.getTrainingStartTime())) {
+			if (!StringUtils.isEmpty(dailyAttendanceForm.getTrainingEndTime()) && !StringUtils.isEmpty(dailyAttendanceForm.getTrainingStartTime())) {
 				startTime = new TrainingTime(dailyAttendanceForm.getTrainingStartTime());
 				endTime = new TrainingTime(dailyAttendanceForm.getTrainingEndTime());
 				//出勤時間　>　退勤時間の場合
