@@ -23,6 +23,7 @@ import jp.co.sss.lms.util.Constants;
  * @author 東京ITスクール
  * @author 峠伸治 - Task.25
  * @author 峠伸治 - Task.26
+ * @author 峠伸治 - Task.27
  */
 @Controller
 @RequestMapping("/attendance")
@@ -139,6 +140,7 @@ public class AttendanceController {
 	 * @param result
 	 * @return 勤怠管理画面
 	 * @throws ParseException
+	 * @author 峠伸治 - Task.26
 	 * @author 峠伸治 - Task.27
 	 */
 	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
