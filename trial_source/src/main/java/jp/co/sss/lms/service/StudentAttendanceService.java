@@ -11,6 +11,7 @@ import java.util.Map;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 
 import jp.co.sss.lms.dto.AttendanceManagementDto;
@@ -33,6 +34,7 @@ import jp.co.sss.lms.util.TrainingTime;
  * @author 東京ITスクール
  * @author 峠伸治 - Task.25
  * @author 峠伸治 - Task.26
+ * @author 峠伸治 - Task.27
  */
 @Service
 public class StudentAttendanceService {
@@ -404,22 +406,29 @@ public class StudentAttendanceService {
 	public void formatConversion(AttendanceForm attendanceForm) {
 		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
 			//出勤時間を変換(未入力の場合は行わない)
-			if ((!dailyAttendanceForm.getTrainingStartTimeHour().isEmpty())
-					&& (!dailyAttendanceForm.getTrainingStartTimeMinute().isEmpty())) {
+			
+			if ((!StringUtils.isEmpty(dailyAttendanceForm.getTrainingStartTimeHour()))
+					&& (!StringUtils.isEmpty(dailyAttendanceForm.getTrainingStartTimeMinute()))) {
 				//時間と分を結合(HH:mm形式)
 				TrainingTime trainingStartTime = new TrainingTime(
 						Integer.parseInt(dailyAttendanceForm.getTrainingStartTimeHour()),
 						Integer.parseInt(dailyAttendanceForm.getTrainingStartTimeMinute()));
 				dailyAttendanceForm.setTrainingStartTime(trainingStartTime.getFormattedString());
 			}
+			else {
+				dailyAttendanceForm.setTrainingStartTime(null);
+			}
 			//退勤時間を変換(未入力の場合は行わない)
-			if ((!dailyAttendanceForm.getTrainingEndTimeHour().isEmpty())
-					&& (!dailyAttendanceForm.getTrainingEndTimeMinute().isEmpty())) {
+			if ((!StringUtils.isEmpty(dailyAttendanceForm.getTrainingEndTimeHour()))
+					&& (!StringUtils.isEmpty(dailyAttendanceForm.getTrainingEndTimeMinute()))) {
 				//時間と分を結合(HH:mm形式)
 				TrainingTime trainingEndTime = new TrainingTime(
 						Integer.parseInt(dailyAttendanceForm.getTrainingEndTimeHour()),
 						Integer.parseInt(dailyAttendanceForm.getTrainingEndTimeMinute()));
 				dailyAttendanceForm.setTrainingEndTime(trainingEndTime.getFormattedString());
+			}
+			else {
+				dailyAttendanceForm.setTrainingEndTime(null);
 			}
 		}
 
@@ -439,40 +448,41 @@ public class StudentAttendanceService {
 			TrainingTime endTime;
 			DailyAttendanceForm dailyAttendanceForm = attendanceForm.getAttendanceList().get(i);
 			//備考欄の文字数エラー追加
-			if (dailyAttendanceForm.getNote().length() > 1) {
+			if (dailyAttendanceForm.getNote().length() > 100) {
 				result.rejectValue("attendanceList[" + i + "].note", Constants.VALID_KEY_MAXBYTELENGTH,
 						new String[] { "備考", "100" }, null);
 			}
 			//出勤時間が片方未入力
-			if (dailyAttendanceForm.getTrainingStartTimeHour().isEmpty()
-					&& !dailyAttendanceForm.getTrainingStartTimeMinute().isEmpty()) {
+			if (StringUtils.isEmpty(dailyAttendanceForm.getTrainingStartTimeHour())
+					&& !dailyAttendanceForm.getTrainingStartTimeMinute().isBlank()) {
 				result.rejectValue("attendanceList[" + i + "].trainingStartTimeHour", Constants.INPUT_INVALID,
 						new String[] { "出勤時間" }, null);
 			}
-			if (!dailyAttendanceForm.getTrainingStartTimeHour().isEmpty()
-					&& dailyAttendanceForm.getTrainingStartTimeMinute().isEmpty()) {
+			if (!StringUtils.isEmpty(dailyAttendanceForm.getTrainingStartTimeHour())
+					&& StringUtils.isEmpty(dailyAttendanceForm.getTrainingStartTimeMinute())) {
 				result.rejectValue("attendanceList[" + i + "].trainingStartTimeMinute", Constants.INPUT_INVALID,
 						new String[] { "出勤時間" }, null);
 			}
 			//退勤時間が片方未入力
-			if (dailyAttendanceForm.getTrainingEndTimeHour().isEmpty()
-					&& !dailyAttendanceForm.getTrainingEndTimeMinute().isEmpty()) {
+			if (StringUtils.isEmpty(dailyAttendanceForm.getTrainingEndTimeHour())
+					&& !StringUtils.isEmpty(dailyAttendanceForm.getTrainingEndTimeMinute())) {
 				result.rejectValue("attendanceList[" + i + "].trainingEndTimeHour", Constants.INPUT_INVALID,
 						new String[] { "退勤時間" }, null);
 			}
-			if (!dailyAttendanceForm.getTrainingEndTimeHour().isEmpty()
-					&& dailyAttendanceForm.getTrainingEndTimeMinute().isEmpty()) {
+			if (!StringUtils.isEmpty(dailyAttendanceForm.getTrainingEndTimeHour())
+					&& StringUtils.isEmpty(dailyAttendanceForm.getTrainingEndTimeMinute())) {
 				result.rejectValue("attendanceList[" + i + "].trainingEndTimeMinute", Constants.INPUT_INVALID,
 						new String[] { "退勤時間" }, null);
 			}
 			//出勤時間に入力なし　＆　退勤時間に入力あり
-			if (dailyAttendanceForm.getTrainingStartTime().isEmpty()
-					&& !dailyAttendanceForm.getTrainingEndTime().isEmpty()) {
+			if (StringUtils.isEmpty(dailyAttendanceForm.getTrainingStartTime())
+					&& !StringUtils.isEmpty(dailyAttendanceForm.getTrainingEndTime())) {
 				result.rejectValue("attendanceList[" + i + "].trainingStartTimeHour",
 						Constants.VALID_KEY_ATTENDANCE_PUNCHINEMPTY,
 						null, null);
 			}
-			if (!dailyAttendanceForm.getTrainingStartTime().isEmpty()) {
+			//出退勤の時間が比較できる
+			if (!!StringUtils.isEmpty(dailyAttendanceForm.getTrainingEndTime()) && !StringUtils.isEmpty(dailyAttendanceForm.getTrainingStartTime())) {
 				startTime = new TrainingTime(dailyAttendanceForm.getTrainingStartTime());
 				endTime = new TrainingTime(dailyAttendanceForm.getTrainingEndTime());
 				//出勤時間　>　退勤時間の場合
@@ -480,15 +490,15 @@ public class StudentAttendanceService {
 					result.rejectValue("attendanceList[" + i + "].trainingEndTimeHour",
 							Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE,
 							new String[] { Integer.toString(i) }, null);
-					result.rejectValue("attendanceList[" + i + "].trainingEndTimeMinute",
-							Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE,
-							new String[] { Integer.toString(i) }, null);
 				}
 				//出勤時間 + 中抜け時間　>　退勤時間の場合
-				startTime.add(attendanceUtil.calcBlankTime(dailyAttendanceForm.getBlankTime()));
-				if (startTime.max(endTime, startTime).equals(startTime)) {
-					result.rejectValue("attendanceList[" + i + "].note", Constants.VALID_KEY_MAXBYTELENGTH,
-							new String[] { "備考", "100" }, null);
+				if (dailyAttendanceForm.getBlankTime() != null) {
+					startTime = startTime.add(attendanceUtil.calcBlankTime(dailyAttendanceForm.getBlankTime()));
+					if (startTime.max(endTime, startTime).equals(startTime)) {
+						result.rejectValue("attendanceList[" + i + "].blankTime",
+								Constants.VALID_KEY_ATTENDANCE_BLANKTIMEERROR,
+								null, null);
+					}
 				}
 			}
 
