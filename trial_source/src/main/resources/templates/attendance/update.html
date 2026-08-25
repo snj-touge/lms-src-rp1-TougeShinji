@@ -44,7 +44,8 @@
 					<thead>
 						<tr>
 							<th class="w140">日付</th>
-							<th class="w300">コース内容</th>
+							<!-- 峠 Task.28	-->
+							<th class="w300" colspan="2">コース内容</th>
 							<!-- 峠 Task.26	-->
 							<th class="w180" colspan="3">出勤</th>
 							<th class="w180" colspan="3">退勤</th>
@@ -75,7 +76,9 @@
 										th:value="${dailyAttendanceForm.trainingEndTime}" />
 								</th:block>
 								<td class="w140">[[${dailyAttendanceForm.dispTrainingDate}]]</td>
-								<td class="w300">[[${dailyAttendanceForm.sectionName}]]</td>
+								<td class="w140">[[${dailyAttendanceForm.sectionName}]]</td>
+								<!-- 峠 Task.28	-->
+								<td class="w60"><input type="button" class="btn btn-success" value="定時" th:data-index="${stat.index}" onclick="inputTime(this)"/></td>
 								<!-- 峠 Task.26	-->
 								<td class="w80">
 									<select th:name="|attendanceList[${stat.index}].trainingStartTimeHour|"
@@ -149,7 +152,7 @@
 		</div>
 	</div>
 	<!-- 峠 Task.27	-->
-	<script>
+	<script th:inline="javascript">
 		function registCheck() {
 			if (confirm("更新します。よろしいですか？")) {
 				return true;
@@ -157,6 +160,25 @@
 			else {
 				return false;
 			}
+		}
+		<!-- 峠 Task.28	-->
+		function inputTime(button){
+			const listNumber = button.dataset.index;
+			const selectStartTimeHour = "attendanceList[" + listNumber + "].trainingStartTimeHour";
+			const startTimeHour = document.getElementsByName(selectStartTimeHour)[0];
+			startTimeHour.selectedIndex = 10;
+			
+			const selectStartTimeMinute = "attendanceList[" + listNumber + "].trainingStartTimeMinute";
+			const startTimeMinute = document.getElementsByName(selectStartTimeMinute)[0];
+			startTimeMinute.selectedIndex = 1;
+			
+			const selectEndTimeHour = "attendanceList[" + listNumber + "].trainingEndTimeHour";
+			const endTimeHour = document.getElementsByName(selectEndTimeHour)[0];
+			endTimeHour.selectedIndex = 19;
+			
+			const selectEndTimeMinute = "attendanceList[" + listNumber + "].trainingEndTimeMinute";
+			const endTimeMinute = document.getElementsByName(selectEndTimeMinute)[0];
+			endTimeMinute.selectedIndex = 1;
 		}
 	</script>
 </body>
