@@ -41,7 +41,8 @@
 					</ul>
 				</th:block>
 				<table class="table table-hover dataTable no-footer">
-					<thead>
+					<!-- 峠 Task.29	-->
+					<thead style="display: block;">
 						<tr>
 							<th class="w140">日付</th>
 							<!-- 峠 Task.28	-->
@@ -54,7 +55,8 @@
 							<th class="w240">備考</th>
 						</tr>
 					</thead>
-					<tbody>
+					<!-- 峠 Task.29	-->
+					<tbody style="display: block; overflow-y: scroll; height: 560px;">
 						<th:block th:each="dailyAttendanceForm, stat : *{attendanceList}">
 							<tr>
 								<th:block>
