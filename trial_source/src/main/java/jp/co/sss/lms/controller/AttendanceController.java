@@ -57,9 +57,6 @@ public class AttendanceController {
 	 * @return 勤怠管理画面
 	 * @throws ParseException
 	 * @author 峠伸治 - Task.25
-	 * @author 峠伸治 - Task.26
-	 * @author 峠伸治 - Task.27
-	 * @author 峠伸治 - Task.57
 	 */
 	@RequestMapping(path = "/detail", method = RequestMethod.GET)
 	public String index(Model model) throws ParseException {
