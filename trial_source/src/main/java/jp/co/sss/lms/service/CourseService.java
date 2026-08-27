@@ -1,12 +1,14 @@
 package jp.co.sss.lms.service;
 
 import java.text.ParseException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jp.co.sss.lms.dto.CourseDto;
 import jp.co.sss.lms.dto.CourseServiceCourseDto;
 import jp.co.sss.lms.mapper.MCourseMapper;
 import jp.co.sss.lms.util.Constants;
@@ -17,6 +19,7 @@ import jp.co.sss.lms.util.MessageUtil;
  * コース情報サービス
  * 
  * @author 東京ITスクール
+ * @author 峠伸治 - Task.57
  */
 @Service
 public class CourseService {
@@ -63,6 +66,19 @@ public class CourseService {
 
 		return courseServiceCourseDto;
 
+	}
+	
+	/**
+	 * コース情報サービス コース情報の全検索
+	 * 
+	 * @return courceDtoList
+	 * @author 峠伸治 - Task.57
+	 */
+	public List<CourseDto> getCourseDtoList() {
+		
+		List<CourseDto> courceDtoList = mCourseMapper.getCouseDto(Constants.DB_FLG_FALSE);
+		
+		return courceDtoList;
 	}
 
 }
