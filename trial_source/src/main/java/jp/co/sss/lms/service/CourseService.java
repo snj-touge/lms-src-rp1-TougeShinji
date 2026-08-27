@@ -76,7 +76,7 @@ public class CourseService {
 	 */
 	public List<CourseDto> getCourseDtoList() {
 		
-		List<CourseDto> courceDtoList = mCourseMapper.getCouseDto(Constants.DB_FLG_FALSE);
+		List<CourseDto> courceDtoList = mCourseMapper.getCourseDto(Constants.DB_FLG_FALSE);
 		
 		return courceDtoList;
 	}
