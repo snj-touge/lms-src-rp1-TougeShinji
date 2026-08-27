@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/common/layout :: layout(~{::title},~{::body/content()})}">
+
+<head>
+	<meta charset="UTF-8">
+	<title>勤怠情報確認｜LMS</title>
+</head>
+<body>
+<h2>勤怠情報確認<small>（受講生一覧）</small></h2>
+
+          <div class="well bs-component">
+            <form th:action="@{/attendance/list}" name="attendance_listActionForm" method="post" class="form-horizontal">
+              <fieldset>
+                <legend>検索</legend>
+                <div class="form-group">
+                  <label for="courseName" class="col-lg-2 control-label">コース名</label>
+                  <div class="col-lg-10">
+                    <input type="text" name="courseName" th:value="${courseName}" id="courseName" class="form-control"list="courselist">
+                    
+                    <datalist id="courselist">
+                      </option>
+                      <option th:each="course:${courseList}" th:value="${course}">
+                      </option>
+                    </datalist>
+                    
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="placeId" class="col-lg-2 control-label">会場名</label>
+                  <div class="col-lg-10">
+                    <input type="text" name="" th:value="${placeName}" readonly="readonly" id="placeId" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="companyName" class="col-lg-2 control-label">企業名</label>
+                  <div class="col-lg-10">
+                    <input type="text" name="companyName" th:value="${companyName}" id="companyName" class="form-control" list="companylist">
+                    
+                    <datalist id="companylist">
+                      </option>
+                      <option th:each="company:${companyList}" th:value="${company}">
+                      </optionth>
+                    </datalist>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="userName" class="col-lg-2 control-label">ユーザー名</label>
+                  <div class="col-lg-10">
+                    <input type="text" name="userName" th;value="${userName}" id="userName" class="form-control">
+
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-lg-10 col-lg-offset-2">
+                    <input type="submit" name="search" value="検索" class="btn btn-primary">
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+
+
+          <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="dataTables_length" id="DataTables_Table_0_length">
+
+                </div>
+              </div>
+              <div class="col-sm-6"></div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <table class="table table-hover sortabletable dataTable no-footer" id="DataTables_Table_0" role="grid"
+                  aria-describedby="DataTables_Table_0_info">
+                  <thead>
+                    <tr role="row">
+                      <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                        aria-sort="ascending" aria-label="ユーザーID: activate to sort column descending">ユーザーID</th>
+                      <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                        aria-label="ユーザー名: activate to sort column ascending">ユーザー名</th>
+                      <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                        aria-label="コース名: activate to sort column ascending">コース名</th>
+                      <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                        aria-label="企業名: activate to sort column ascending">企業名</th>
+                      <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                        aria-label="会場: activate to sort column ascending">会場</th>
+                      <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                        aria-label="勤怠: activate to sort column ascending">勤怠</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr th:each="attendanceInformation : ${attendanceInformationList}"  role="row" class="odd">
+                      <td th:text="${attendanceInformation.userId}"class="sorting_1"></td>
+                      <td th:text="${attendanceInformation.userName}"></td>
+                      <td th:text="${attendanceInformation.courseName}"></td>
+                      <td th:text="${attendanceInformation.companyName}"></td>
+                      <td th:text="${attendanceInformation.placeName}"></td>
+                      <td>
+                        <form th:action="@{/attendance/management}" name="attendance_updateActionForm" method="post" >
+                          <input type="hidden" name="lmsUserId" th:value="${attendanceInformation.lmsUserId}">
+                          <input type="submit" value="勤怠確認" class="btn btn-default">
+                        </form>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-5">
+              </div>
+              <div class="col-sm-7">
+                <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+        <!--#main-->
+      </div>
+</body>
+</html>
