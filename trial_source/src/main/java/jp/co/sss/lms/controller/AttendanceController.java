@@ -1,6 +1,7 @@
 package jp.co.sss.lms.controller;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import jp.co.sss.lms.dto.AttendanceInformationDto;
 import jp.co.sss.lms.dto.AttendanceManagementDto;
+import jp.co.sss.lms.dto.CompanyDto;
+import jp.co.sss.lms.dto.CourseDto;
 import jp.co.sss.lms.dto.LoginUserDto;
 import jp.co.sss.lms.form.AttendanceForm;
+import jp.co.sss.lms.service.CompanyService;
+import jp.co.sss.lms.service.CourseService;
 import jp.co.sss.lms.service.StudentAttendanceService;
 import jp.co.sss.lms.util.AttendanceUtil;
 import jp.co.sss.lms.util.Constants;
@@ -24,6 +30,7 @@ import jp.co.sss.lms.util.Constants;
  * @author 峠伸治 - Task.25
  * @author 峠伸治 - Task.26
  * @author 峠伸治 - Task.27
+ * @author 峠伸治 - Task.57
  */
 @Controller
 @RequestMapping("/attendance")
@@ -31,6 +38,11 @@ public class AttendanceController {
 
 	@Autowired
 	private StudentAttendanceService studentAttendanceService;
+	//検索候補取得用のサービスクラス
+	@Autowired
+	private CourseService courseService;
+	@Autowired
+	private CompanyService companyService;
 	@Autowired
 	private LoginUserDto loginUserDto;
 	@Autowired
@@ -45,6 +57,9 @@ public class AttendanceController {
 	 * @return 勤怠管理画面
 	 * @throws ParseException
 	 * @author 峠伸治 - Task.25
+	 * @author 峠伸治 - Task.26
+	 * @author 峠伸治 - Task.27
+	 * @author 峠伸治 - Task.57
 	 */
 	@RequestMapping(path = "/detail", method = RequestMethod.GET)
 	public String index(Model model) throws ParseException {
@@ -167,4 +182,76 @@ public class AttendanceController {
 		return "attendance/detail";
 	}
 
+	/**
+	 * 勤怠情報確認画面 初期表示
+	 * 
+	 * @param model
+	 * @return 勤怠情報確認画面
+	 * @author 峠伸治 - Task.57
+	 */
+	@RequestMapping(path = "/list", method = RequestMethod.GET)
+	public String list(Model model) {
+		//会場名と自身のlmsユーザIDから検索
+		List<AttendanceInformationDto> attendanceInformationDtoList = studentAttendanceService
+				.getAttendanceInformationList(null, null, null);
+		//検索候補リスト作成
+		List<String> courseNameList = new ArrayList<String>();
+		List<String> companyNameList = new ArrayList<String>();
+		for (CourseDto courseDto : courseService.getCourseDtoList()) {
+			courseNameList.add(courseDto.getCourseName());
+		}
+		for (CompanyDto companyDto : companyService.getCompanyDtoList()) {
+			companyNameList.add(companyDto.getCompanyName());
+		}
+		//検索用の変数を追加
+		model.addAttribute("courseName", "");
+		model.addAttribute("placeName", loginUserDto.getPlaceName());
+		model.addAttribute("companyName", "");
+		model.addAttribute("userName", "");
+		//検索候補用のリストを追加
+		model.addAttribute("courseList", courseNameList);
+		model.addAttribute("companyList", companyNameList);
+		//検索欄のリストを追加
+		model.addAttribute("attendanceInformationList", attendanceInformationDtoList);
+
+		return "attendance/list";
+	}
+
+	/**
+	 * 勤怠情報確認画面 『検索』ボタン押下
+	 * 
+	 * @param courseName
+	 * @param companyName
+	 * @param userName
+	 * @param model
+	 * @return 勤怠情報確認画面
+	 * @author 峠伸治 - Task.57
+	 */
+	@RequestMapping(path = "/list", method = RequestMethod.POST)
+	public String search(String courseName, String companyName,String userName,Model model) {
+		//受け取った内容と会場名、自身のlmsユーザIDから検索
+		System.out.println(userName);
+		List<AttendanceInformationDto> attendanceInformationDtoList = studentAttendanceService
+				.getAttendanceInformationList(courseName,companyName,userName);
+		List<String> courseNameList = new ArrayList<String>();
+		List<String> companyNameList = new ArrayList<String>();
+		for (CourseDto courseDto : courseService.getCourseDtoList()) {
+			courseNameList.add(courseDto.getCourseName());
+		}
+		for (CompanyDto companyDto : companyService.getCompanyDtoList()) {
+			companyNameList.add(companyDto.getCompanyName());
+		}
+		//検索用の変数を追加
+		model.addAttribute("courseName", courseName);
+		model.addAttribute("placeName", loginUserDto.getPlaceName());
+		model.addAttribute("companyName", companyName);
+		model.addAttribute("userName", userName);
+		//検索候補用のリストを追加
+		model.addAttribute("courseList", courseNameList);
+		model.addAttribute("companyList", companyNameList);
+		//検索欄のリストを追加
+		model.addAttribute("attendanceInformationList", attendanceInformationDtoList);
+		
+		return "attendance/list";
+	}
 }
