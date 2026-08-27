@@ -14,12 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 
+import jp.co.sss.lms.dto.AttendanceInformationDto;
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
 import jp.co.sss.lms.entity.TStudentAttendance;
 import jp.co.sss.lms.enums.AttendanceStatusEnum;
 import jp.co.sss.lms.form.AttendanceForm;
 import jp.co.sss.lms.form.DailyAttendanceForm;
+import jp.co.sss.lms.mapper.TStudentAttendanceInformationMapper;
 import jp.co.sss.lms.mapper.TStudentAttendanceMapper;
 import jp.co.sss.lms.util.AttendanceUtil;
 import jp.co.sss.lms.util.Constants;
@@ -51,6 +53,8 @@ public class StudentAttendanceService {
 	private LoginUserDto loginUserDto;
 	@Autowired
 	private TStudentAttendanceMapper tStudentAttendanceMapper;
+	@Autowired
+	private TStudentAttendanceInformationMapper tStudentAttendanceInformationMapper;
 
 	/**
 	 * 勤怠一覧情報取得
@@ -406,7 +410,7 @@ public class StudentAttendanceService {
 	public void formatConversion(AttendanceForm attendanceForm) {
 		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
 			//出勤時間を変換(未入力の場合は行わない)
-			
+
 			if ((!StringUtils.isEmpty(dailyAttendanceForm.getTrainingStartTimeHour()))
 					&& (!StringUtils.isEmpty(dailyAttendanceForm.getTrainingStartTimeMinute()))) {
 				//時間と分を結合(HH:mm形式)
@@ -414,8 +418,7 @@ public class StudentAttendanceService {
 						Integer.parseInt(dailyAttendanceForm.getTrainingStartTimeHour()),
 						Integer.parseInt(dailyAttendanceForm.getTrainingStartTimeMinute()));
 				dailyAttendanceForm.setTrainingStartTime(trainingStartTime.getFormattedString());
-			}
-			else {
+			} else {
 				dailyAttendanceForm.setTrainingStartTime(null);
 			}
 			//退勤時間を変換(未入力の場合は行わない)
@@ -426,8 +429,7 @@ public class StudentAttendanceService {
 						Integer.parseInt(dailyAttendanceForm.getTrainingEndTimeHour()),
 						Integer.parseInt(dailyAttendanceForm.getTrainingEndTimeMinute()));
 				dailyAttendanceForm.setTrainingEndTime(trainingEndTime.getFormattedString());
-			}
-			else {
+			} else {
 				dailyAttendanceForm.setTrainingEndTime(null);
 			}
 		}
@@ -482,7 +484,8 @@ public class StudentAttendanceService {
 						null, null);
 			}
 			//出退勤の時間が比較できる
-			if (!StringUtils.isEmpty(dailyAttendanceForm.getTrainingEndTime()) && !StringUtils.isEmpty(dailyAttendanceForm.getTrainingStartTime())) {
+			if (!StringUtils.isEmpty(dailyAttendanceForm.getTrainingEndTime())
+					&& !StringUtils.isEmpty(dailyAttendanceForm.getTrainingStartTime())) {
 				startTime = new TrainingTime(dailyAttendanceForm.getTrainingStartTime());
 				endTime = new TrainingTime(dailyAttendanceForm.getTrainingEndTime());
 				//出勤時間　>　退勤時間の場合
@@ -504,6 +507,14 @@ public class StudentAttendanceService {
 
 		}
 
+	}
+
+	public List<AttendanceInformationDto> getAttendanceInformationList(String courseName, String companyName,
+			String userName) {
+		List<AttendanceInformationDto> attendanceInformationDtoList = tStudentAttendanceInformationMapper.getAttendanceInformation(courseName,
+				loginUserDto.getPlaceId(), companyName, userName, Constants.CODE_VAL_ROLL_STUDENT,
+				Constants.DB_FLG_FALSE);
+		return attendanceInformationDtoList;
 	}
 
 }
