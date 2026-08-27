@@ -15,7 +15,7 @@ import jp.co.sss.lms.dto.CompanyDto;
 public interface MCompanyMapper {
 	
 	/**
-	 * 企業情報を全件取得
+	 * 企業情報全件取得
 	 * 
 	 * @param deleteFlg
 	 * @return 企業情報DTOリスト

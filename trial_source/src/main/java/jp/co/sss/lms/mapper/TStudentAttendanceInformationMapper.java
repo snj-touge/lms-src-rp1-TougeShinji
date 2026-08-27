@@ -15,6 +15,8 @@ import jp.co.sss.lms.dto.AttendanceInformationDto;
 @Mapper
 public interface TStudentAttendanceInformationMapper {
 	/**
+	 * 受講生の勤怠情報取得
+	 * 
 	 * @param courseName
 	 * @param placeId
 	 * @param companyName
