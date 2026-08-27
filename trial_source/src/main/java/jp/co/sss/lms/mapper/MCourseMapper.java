@@ -43,5 +43,5 @@ public interface MCourseMapper {
 	 * @return コースDTO
 	 * @author 峠伸治 - Task.57
 	 */
-	List<CourseDto> getCouseDto(@Param("deleteFlg") Short deleteFlg);
+	List<CourseDto> getCourseDto(@Param("deleteFlg") Short deleteFlg);
 }

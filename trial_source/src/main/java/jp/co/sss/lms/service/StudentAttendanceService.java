@@ -37,6 +37,7 @@ import jp.co.sss.lms.util.TrainingTime;
  * @author 峠伸治 - Task.25
  * @author 峠伸治 - Task.26
  * @author 峠伸治 - Task.27
+ * @author 峠伸治 - Task.57
  */
 @Service
 public class StudentAttendanceService {
@@ -509,11 +510,21 @@ public class StudentAttendanceService {
 
 	}
 
+	/**
+	 * 勤怠情報一覧を取得
+	 * 
+	 * @param courseName
+	 * @param companyName
+	 * @param userName
+	 * @return attendanceInformationDtoList
+	 * @author 峠伸治 - Task.57
+	 */
 	public List<AttendanceInformationDto> getAttendanceInformationList(String courseName, String companyName,
 			String userName) {
-		List<AttendanceInformationDto> attendanceInformationDtoList = tStudentAttendanceInformationMapper.getAttendanceInformation(courseName,
-				loginUserDto.getPlaceId(), companyName, userName, Constants.CODE_VAL_ROLL_STUDENT,
-				Constants.DB_FLG_FALSE);
+		List<AttendanceInformationDto> attendanceInformationDtoList = tStudentAttendanceInformationMapper
+				.getAttendanceInformation(courseName,
+						loginUserDto.getPlaceId(), companyName, userName, Constants.CODE_VAL_ROLL_STUDENT,
+						Constants.DB_FLG_FALSE);
 		return attendanceInformationDtoList;
 	}
 
