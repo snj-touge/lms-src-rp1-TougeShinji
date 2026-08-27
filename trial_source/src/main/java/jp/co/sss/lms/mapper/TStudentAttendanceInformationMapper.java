@@ -19,13 +19,13 @@ public interface TStudentAttendanceInformationMapper {
 	 * @param placeId
 	 * @param companyName
 	 * @param userName
-	 * @param hddenFlg
+	 * @param role
 	 * @param deleteFlg
 	 * @return 勤怠情報確認画面用DTOリスト
 	 * @author 峠伸治 - Task.57
 	 */
 	List<AttendanceInformationDto> getAttendanceInformation(@Param("courseName") String courseName,
 			@Param("placeId") Integer placeId, @Param("companyName") String companyName,
-			@Param("userName") String userName, @Param("hiddenFlg") Short hddenFlg,
+			@Param("userName") String userName, @Param("role") String role,
 			@Param("deleteFlg") Short deleteFlg);
 }
