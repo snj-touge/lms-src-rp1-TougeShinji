@@ -521,9 +521,10 @@ public class StudentAttendanceService {
 	 */
 	public List<AttendanceInformationDto> getAttendanceInformationList(String courseName, String companyName,
 			String userName) {
-		List<AttendanceInformationDto> attendanceInformationDtoList = tStudentAttendanceInformationMapper.getAttendanceInformation(courseName,
-				loginUserDto.getPlaceId(), companyName, userName, Constants.CODE_VAL_ROLL_STUDENT,
-				Constants.DB_FLG_FALSE);
+		List<AttendanceInformationDto> attendanceInformationDtoList = tStudentAttendanceInformationMapper
+				.getAttendanceInformation(courseName,
+						loginUserDto.getPlaceId(), companyName, userName, Constants.CODE_VAL_ROLL_STUDENT,
+						Constants.DB_FLG_FALSE);
 		return attendanceInformationDtoList;
 	}
 

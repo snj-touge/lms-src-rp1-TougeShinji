@@ -9,7 +9,7 @@ import lombok.Data;
  */
 @Data
 public class AttendanceInformationDto {
-	
+
 	/** LMSユーザID */
 	private Integer lmsUserId;
 	/** ユーザID */

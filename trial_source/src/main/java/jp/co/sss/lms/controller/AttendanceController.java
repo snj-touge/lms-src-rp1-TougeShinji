@@ -228,10 +228,10 @@ public class AttendanceController {
 	 * @author 峠伸治 - Task.57
 	 */
 	@RequestMapping(path = "/list", method = RequestMethod.POST)
-	public String search(String courseName, String companyName,String userName,Model model) {
+	public String search(String courseName, String companyName, String userName, Model model) {
 		//受け取った内容と会場名、自身のlmsユーザIDから検索
 		List<AttendanceInformationDto> attendanceInformationDtoList = studentAttendanceService
-				.getAttendanceInformationList(courseName,companyName,userName);
+				.getAttendanceInformationList(courseName, companyName, userName);
 		List<String> courseNameList = new ArrayList<String>();
 		List<String> companyNameList = new ArrayList<String>();
 		for (CourseDto courseDto : courseService.getCourseDtoList()) {
@@ -250,7 +250,7 @@ public class AttendanceController {
 		model.addAttribute("companyList", companyNameList);
 		//検索欄のリストを追加
 		model.addAttribute("attendanceInformationList", attendanceInformationDtoList);
-		
+
 		return "attendance/list";
 	}
 }
