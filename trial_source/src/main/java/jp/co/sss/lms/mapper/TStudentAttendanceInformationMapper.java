@@ -26,6 +26,6 @@ public interface TStudentAttendanceInformationMapper {
 	 */
 	List<AttendanceInformationDto> getAttendanceInformation(@Param("courseName") String courseName,
 			@Param("placeId") Integer placeId, @Param("companyName") String companyName,
-			@Param("userName") String userName, @Param("hiddenFlg") Short hddenFlg,
+			@Param("userName") String userName, @Param("role") String role,
 			@Param("deleteFlg") Short deleteFlg);
 }
