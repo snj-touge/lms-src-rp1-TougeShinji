@@ -17,7 +17,7 @@ public class AttendanceInformationDto {
 	/** ユーザ名 */
 	private String userName;
 	/** コース名 */
-	private String courceName;
+	private String courseName;
 	/** 会場名 */
 	private String placeName;
 	/** 企業名 */
