@@ -230,7 +230,6 @@ public class AttendanceController {
 	@RequestMapping(path = "/list", method = RequestMethod.POST)
 	public String search(String courseName, String companyName,String userName,Model model) {
 		//受け取った内容と会場名、自身のlmsユーザIDから検索
-		System.out.println(userName);
 		List<AttendanceInformationDto> attendanceInformationDtoList = studentAttendanceService
 				.getAttendanceInformationList(courseName,companyName,userName);
 		List<String> courseNameList = new ArrayList<String>();
