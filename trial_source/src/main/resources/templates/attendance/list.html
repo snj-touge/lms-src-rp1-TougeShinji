@@ -100,7 +100,7 @@
                       <td th:text="${attendanceInformation.companyName}"></td>
                       <td th:text="${attendanceInformation.placeName}"></td>
                       <td>
-                        <form th:action="@{/attendance/management}" name="attendance_updateActionForm" method="post" >
+                        <form th:action="@{/attendance/detail}" name="attendance_updateActionForm" method="post" >
                           <input type="hidden" name="lmsUserId" th:value="${attendanceInformation.lmsUserId}">
                           <input type="submit" value="勤怠確認" class="btn btn-default">
                         </form>
