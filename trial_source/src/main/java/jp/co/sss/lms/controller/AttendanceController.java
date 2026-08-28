@@ -250,4 +250,27 @@ public class AttendanceController {
 
 		return "attendance/list";
 	}
+	/**
+	 * 勤怠管理画面(講師用) 初期表示
+	 * 
+	 * @param lmsUserId
+	 * @param model
+	 * @return 勤怠管理画面(講師用)
+	 * @throws ParseException
+	 * @author 峠伸治 - Task.57
+	 */
+	@RequestMapping(path = "/detail", method = RequestMethod.POST)
+	public String adminIndex(Integer lmsUserId,Model model) throws ParseException {
+
+		// 勤怠一覧の取得
+		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
+				.getAttendanceManagement(loginUserDto.getCourseId(), lmsUserId);
+		//過去日に未入力があるか検索
+		boolean isNotEnter = studentAttendanceService.searchNotEnterCount();
+		//過去日に未入力があるか表示
+		model.addAttribute("isNotEnter", isNotEnter);
+		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
+
+		return "attendance/detail";
+	}
 }
