@@ -528,4 +528,33 @@ public class StudentAttendanceService {
 		return attendanceInformationDtoList;
 	}
 
+	/**
+	 * 勤怠の未入力の検索(講師用)
+	 * 
+	 * @return　過去日に未入力があるかの有無
+	 * @throws ParseException
+	 * @author 峠伸治 - Task.57
+	 */
+	public boolean searchNotEnterCount() throws ParseException {
+		TStudentAttendance tStudentAttendance = new TStudentAttendance();
+		//日付のフォーマットパターンを設定
+		SimpleDateFormat sdf = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT);
+		//今日の日付を取得
+		Date today = new Date();
+		String dateString = sdf.format(today);
+		today = sdf.parse(dateString);
+		//登録処理
+		tStudentAttendance.setLmsUserId(loginUserDto.getUserId());
+		tStudentAttendance.setDeleteFlg(Constants.DB_FLG_FALSE);
+		tStudentAttendance.setTrainingDate(today);
+		//過去日の未入力数をカウント
+		Integer count = tStudentAttendanceMapper.notEnterCount(tStudentAttendance);
+		//未入力カウント数が0より大きい場合、trueを返す
+		if (count > 0) {
+			return true;
+		}
+		//未入力カウント数が0の場合、falseを返す
+		return false;
+	}
+
 }
