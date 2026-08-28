@@ -534,8 +534,9 @@ public class StudentAttendanceService {
 	 * @return　過去日に未入力があるかの有無
 	 * @throws ParseException
 	 * @author 峠伸治 - Task.57
+	 * @param lmsUserId 
 	 */
-	public boolean searchNotEnterCount() throws ParseException {
+	public boolean searchNotEnterCount(Integer lmsUserId) throws ParseException {
 		TStudentAttendance tStudentAttendance = new TStudentAttendance();
 		//日付のフォーマットパターンを設定
 		SimpleDateFormat sdf = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT);
@@ -544,7 +545,7 @@ public class StudentAttendanceService {
 		String dateString = sdf.format(today);
 		today = sdf.parse(dateString);
 		//登録処理
-		tStudentAttendance.setLmsUserId(loginUserDto.getUserId());
+		tStudentAttendance.setLmsUserId(lmsUserId);
 		tStudentAttendance.setDeleteFlg(Constants.DB_FLG_FALSE);
 		tStudentAttendance.setTrainingDate(today);
 		//過去日の未入力数をカウント
